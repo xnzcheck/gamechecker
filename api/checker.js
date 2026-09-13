@@ -96,7 +96,6 @@ export default async function handler(req, res) {
     // =========================
     if (game === "ff" || game === "freefire") {
 
-      // Player ID mesti nombor
       if (!/^[0-9]+$/.test(id)) {
         return res.status(400).json({
           success: false,
@@ -104,12 +103,11 @@ export default async function handler(req, res) {
         });
       }
 
-      // Endpoint menyokong SG dan ID
       const ffRegion =
         server === "ID" ? "ID" : "SG";
 
       const url =
-        "https://free-ff-api-src-5plp.onrender.com/api/v1/account" +
+        "https://ffdvinh09-info.vercel.app/player-info" +
         "?region=" + encodeURIComponent(ffRegion) +
         "&uid=" + encodeURIComponent(id);
 
@@ -162,8 +160,6 @@ export default async function handler(req, res) {
         });
       }
 
-      // Response endpoint:
-      // data.basicInfo
       const player =
         data?.basicInfo ||
         data?.basicinfo ||
@@ -171,10 +167,7 @@ export default async function handler(req, res) {
         data?.data?.basicinfo;
 
       if (!player) {
-        console.error(
-          "FF BASIC INFO TIADA:",
-          data
-        );
+        console.error("FF BASIC INFO TIADA:", data);
 
         return res.status(404).json({
           success: false,
@@ -224,4 +217,4 @@ export default async function handler(req, res) {
       message: "Server checker mengalami masalah"
     });
   }
-                          }
+}
