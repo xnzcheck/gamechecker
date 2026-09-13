@@ -96,6 +96,7 @@ export default async function handler(req, res) {
     // =========================
     if (game === "ff" || game === "freefire") {
 
+      // Player ID mesti nombor
       if (!/^[0-9]+$/.test(id)) {
         return res.status(400).json({
           success: false,
@@ -103,13 +104,14 @@ export default async function handler(req, res) {
         });
       }
 
-      const ffServer =
+      // Endpoint menyokong SG dan ID
+      const ffRegion =
         server === "ID" ? "ID" : "SG";
 
       const url =
-        "https://freefireinfo-zy9l.onrender.com/api/v1/player-profile" +
-        "?uid=" + encodeURIComponent(id) +
-        "&server=" + encodeURIComponent(ffServer);
+        "https://free-ff-api-src-5plp.onrender.com/api/v1/account" +
+        "?region=" + encodeURIComponent(ffRegion) +
+        "&uid=" + encodeURIComponent(id);
 
       let response;
 
@@ -154,18 +156,19 @@ export default async function handler(req, res) {
           data
         );
 
-        return res.status(502).json({
+        return res.status(404).json({
           success: false,
-          message: "Player Free Fire tidak dapat disemak sekarang"
+          message: "Player Free Fire tidak dijumpai"
         });
       }
 
-      // API ini menggunakan basicinfo
+      // Response endpoint:
+      // data.basicInfo
       const player =
-        data?.basicinfo ||
         data?.basicInfo ||
-        data?.data?.basicinfo ||
-        data?.data?.basicInfo;
+        data?.basicinfo ||
+        data?.data?.basicInfo ||
+        data?.data?.basicinfo;
 
       if (!player) {
         console.error(
@@ -195,13 +198,13 @@ export default async function handler(req, res) {
         success: true,
         game: "ff",
         id: String(
-          player?.accountid ||
           player?.accountId ||
+          player?.accountid ||
           id
         ),
         server: String(
           player?.region ||
-          ffServer
+          ffRegion
         ),
         name: String(nickname),
         level: player?.level || null
@@ -221,4 +224,4 @@ export default async function handler(req, res) {
       message: "Server checker mengalami masalah"
     });
   }
-}
+                          }
