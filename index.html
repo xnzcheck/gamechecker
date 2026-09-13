@@ -1,194 +1,242 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XNZ Check</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XNZ CHECK</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #080b12;
-  color: white;
-}
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #080b16, #111827, #05070d);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(20, 25, 40, 0.95);
+      border: 1px solid #293247;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
 
-.box {
-  width: 100%;
-  max-width: 430px;
-  background: #111722;
-  border: 1px solid #263044;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 15px 40px rgba(0,0,0,.4);
-}
+    .logo {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
 
-.logo {
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+    .subtitle {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
 
-.subtitle {
-  text-align: center;
-  color: #8e9ab0;
-  margin-bottom: 25px;
-}
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
 
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+    .tab {
+      flex: 1;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: #1f2937;
+      color: #9ca3af;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-.tab {
-  flex: 1;
-  padding: 13px;
-  border: 0;
-  border-radius: 10px;
-  background: #202838;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .tab.active {
+      background: #2563eb;
+      color: white;
+    }
 
-.tab.active {
-  background: #1683ff;
-}
+    .form {
+      display: none;
+    }
 
-.form {
-  display: none;
-}
+    .form.active {
+      display: block;
+    }
 
-.form.active {
-  display: block;
-}
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #d1d5db;
+    }
 
-label {
-  display: block;
-  margin: 13px 0 7px;
-  color: #cbd3e1;
-  font-size: 14px;
-}
+    input,
+    select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 16px;
+      border-radius: 11px;
+      border: 1px solid #374151;
+      background: #111827;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
 
-input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #344057;
-  background: #080d16;
-  color: white;
-  outline: none;
-  font-size: 16px;
-}
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
+    }
 
-input:focus {
-  border-color: #1683ff;
-}
+    select {
+      appearance: auto;
+    }
 
-.check-btn {
-  width: 100%;
-  margin-top: 20px;
-  padding: 14px;
-  border: 0;
-  border-radius: 10px;
-  background: #1683ff;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .check-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 11px;
+      background: #2563eb;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.check-btn:disabled {
-  opacity: .6;
-}
+    .check-btn:hover {
+      background: #1d4ed8;
+    }
 
-.result {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 12px;
-  background: #080d16;
-  border: 1px solid #263044;
-  display: none;
-}
+    .check-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-.result.show {
-  display: block;
-}
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #111827;
+      border: 1px solid #374151;
+    }
 
-.row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 8px 0;
-  border-bottom: 1px solid #202838;
-}
+    .result.show {
+      display: block;
+    }
 
-.row:last-child {
-  border-bottom: 0;
-}
+    .result-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
 
-.key {
-  color: #8e9ab0;
-}
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 9px 0;
+      border-bottom: 1px solid #273244;
+    }
 
-.value {
-  text-align: right;
-  font-weight: bold;
-}
+    .result-row:last-child {
+      border-bottom: none;
+    }
 
-.error {
-  color: #ff7070;
-}
+    .result-label {
+      color: #9ca3af;
+    }
 
-.success {
-  color: #65e89a;
-}
+    .result-value {
+      font-weight: bold;
+      text-align: right;
+      word-break: break-word;
+    }
 
-.footer {
-  text-align: center;
-  color: #68748a;
-  font-size: 12px;
-  margin-top: 20px;
-}
-</style>
+    .error {
+      display: none;
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 11px;
+      background: #3f1515;
+      border: 1px solid #7f1d1d;
+      color: #fca5a5;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 15px;
+      color: #93c5fd;
+      font-size: 14px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .footer {
+      text-align: center;
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 22px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
-  <div class="box">
+  <div class="container">
 
     <div class="logo">XNZ CHECK</div>
-    <div class="subtitle">Game ID Checker</div>
+
+    <div class="subtitle">
+      Game ID Checker
+    </div>
 
     <div class="tabs">
       <button class="tab active" onclick="showGame('mlbb')">
-        Mobile Legends
+        MOBILE LEGENDS
       </button>
 
       <button class="tab" onclick="showGame('ff')">
-        Free Fire
+        FREE FIRE
       </button>
     </div>
 
-    <!-- MLBB -->
+    <!-- ========================= -->
+    <!-- MOBILE LEGENDS -->
+    <!-- ========================= -->
+
     <div id="mlbbForm" class="form active">
 
-      <label>Mobile Legends User ID</label>
+      <label for="mlbbId">
+        Mobile Legends User ID
+      </label>
+
       <input
         id="mlbbId"
         type="text"
@@ -196,24 +244,34 @@ input:focus {
         placeholder="Contoh: 123456789"
       >
 
-      <label>Zone ID / Server ID</label>
+      <label for="zoneId">
+        Zone ID
+      </label>
+
       <input
-        id="mlbbZone"
+        id="zoneId"
         type="text"
         inputmode="numeric"
         placeholder="Contoh: 1234"
       >
 
       <button class="check-btn" onclick="checkMLBB()">
-        🔍 CHECK MLBB
+        🔍 CHECK MOBILE LEGENDS
       </button>
 
     </div>
 
+
+    <!-- ========================= -->
     <!-- FREE FIRE -->
+    <!-- ========================= -->
+
     <div id="ffForm" class="form">
 
-      <label>Free Fire Player ID</label>
+      <label for="ffId">
+        Free Fire Player ID
+      </label>
+
       <input
         id="ffId"
         type="text"
@@ -221,196 +279,265 @@ input:focus {
         placeholder="Contoh: 1234567890"
       >
 
+      <label for="ffServer">
+        Free Fire Server
+      </label>
+
+      <select id="ffServer">
+        <option value="SG">Singapore (SG)</option>
+        <option value="ID">Indonesia (ID)</option>
+      </select>
+
       <button class="check-btn" onclick="checkFF()">
         🔍 CHECK FREE FIRE
       </button>
 
     </div>
 
-    <div id="result" class="result"></div>
+
+    <div id="loading" class="loading">
+      ⏳ Sedang semak ID...
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <div id="result" class="result">
+
+      <div class="result-title">
+        ✅ Maklumat Akaun
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">Game</span>
+        <span class="result-value" id="resultGame">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">ID</span>
+        <span class="result-value" id="resultId">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">Server</span>
+        <span class="result-value" id="resultServer">-</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">Nickname</span>
+        <span class="result-value" id="resultName">-</span>
+      </div>
+
+    </div>
 
     <div class="footer">
-      XNZ Check • MLBB & Free Fire
+      XNZ CHECK © 2026
     </div>
 
   </div>
-</div>
-
-<script>
-
-let currentGame = "mlbb";
-
-function showGame(game) {
-
-  currentGame = game;
-
-  document
-    .getElementById("mlbbForm")
-    .classList.toggle("active", game === "mlbb");
-
-  document
-    .getElementById("ffForm")
-    .classList.toggle("active", game === "ff");
-
-  const tabs = document.querySelectorAll(".tab");
-
-  tabs[0].classList.toggle("active", game === "mlbb");
-  tabs[1].classList.toggle("active", game === "ff");
-
-  document.getElementById("result").classList.remove("show");
-}
 
 
-async function checkMLBB() {
+  <script>
 
-  const userId = document.getElementById("mlbbId").value.trim();
-  const zoneId = document.getElementById("mlbbZone").value.trim();
+    function showGame(game) {
 
-  if (!userId || !zoneId) {
-    showError("Sila masukkan User ID dan Zone ID.");
-    return;
-  }
+      const mlbbForm = document.getElementById("mlbbForm");
+      const ffForm = document.getElementById("ffForm");
+      const tabs = document.querySelectorAll(".tab");
 
-  await checkGame("mlbb", userId, zoneId);
-}
+      hideMessages();
 
+      if (game === "mlbb") {
 
-async function checkFF() {
+        mlbbForm.classList.add("active");
+        ffForm.classList.remove("active");
 
-  const userId = document.getElementById("ffId").value.trim();
+        tabs[0].classList.add("active");
+        tabs[1].classList.remove("active");
 
-  if (!userId) {
-    showError("Sila masukkan Player ID Free Fire.");
-    return;
-  }
+      } else {
 
-  await checkGame("ff", userId, "");
-}
+        mlbbForm.classList.remove("active");
+        ffForm.classList.add("active");
 
+        tabs[0].classList.remove("active");
+        tabs[1].classList.add("active");
 
-async function checkGame(game, userId, zoneId) {
-
-  const result = document.getElementById("result");
-
-  result.className = "result show";
-  result.innerHTML = `
-    <div class="success">
-      ⏳ Sedang semak ID...
-    </div>
-  `;
-
-  const buttons = document.querySelectorAll(".check-btn");
-  buttons.forEach(button => button.disabled = true);
-
-  try {
-
-    const response = await fetch("/api/checker", {
-
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        game: game,
-        userId: userId,
-        zoneId: zoneId
-      })
-
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || data.success === false) {
-      throw new Error(
-        data.message || "ID tidak dijumpai."
-      );
+      }
     }
 
-    result.innerHTML = `
 
-      <div class="row">
-        <span class="key">Game</span>
-        <span class="value">${escapeHTML(data.game || game)}</span>
-      </div>
+    function showLoading(show) {
 
-      <div class="row">
-        <span class="key">ID</span>
-        <span class="value">${escapeHTML(data.id || userId)}</span>
-      </div>
+      const loading = document.getElementById("loading");
 
-      ${
-        data.server
-        ? `
-        <div class="row">
-          <span class="key">Zone / Server</span>
-          <span class="value">${escapeHTML(data.server)}</span>
-        </div>
-        `
-        : ""
+      if (show) {
+        loading.classList.add("show");
+      } else {
+        loading.classList.remove("show");
+      }
+    }
+
+
+    function showError(message) {
+
+      const error = document.getElementById("error");
+
+      error.textContent = "❌ " + message;
+      error.classList.add("show");
+
+    }
+
+
+    function hideMessages() {
+
+      document.getElementById("error").classList.remove("show");
+      document.getElementById("result").classList.remove("show");
+
+    }
+
+
+    function showResult(data) {
+
+      document.getElementById("resultGame").textContent =
+        data.game === "mlbb" ? "Mobile Legends" : "Free Fire";
+
+      document.getElementById("resultId").textContent =
+        data.id || "-";
+
+      document.getElementById("resultServer").textContent =
+        data.server || "-";
+
+      document.getElementById("resultName").textContent =
+        data.name || "-";
+
+      document.getElementById("result").classList.add("show");
+
+    }
+
+
+    async function checkMLBB() {
+
+      const userId =
+        document.getElementById("mlbbId").value.trim();
+
+      const zoneId =
+        document.getElementById("zoneId").value.trim();
+
+      hideMessages();
+
+      if (!userId) {
+
+        showError("Sila masukkan User ID Mobile Legends.");
+        return;
+
       }
 
-      <div class="row">
-        <span class="key">Nickname</span>
-        <span class="value success">
-          ${escapeHTML(data.name || "Tidak diketahui")}
-        </span>
-      </div>
+      if (!zoneId) {
 
-      ${
-        data.country
-        ? `
-        <div class="row">
-          <span class="key">Country</span>
-          <span class="value">${escapeHTML(data.country)}</span>
-        </div>
-        `
-        : ""
+        showError("Sila masukkan Zone ID Mobile Legends.");
+        return;
+
       }
 
-    `;
+      await checkGame(
+        "mlbb",
+        userId,
+        zoneId,
+        ""
+      );
 
-  } catch (error) {
-
-    showError(
-      error.message || "Server API sedang bermasalah."
-    );
-
-  } finally {
-
-    buttons.forEach(button => button.disabled = false);
-
-  }
-}
+    }
 
 
-function showError(message) {
+    async function checkFF() {
 
-  const result = document.getElementById("result");
+      const userId =
+        document.getElementById("ffId").value.trim();
 
-  result.className = "result show";
+      const server =
+        document.getElementById("ffServer").value;
 
-  result.innerHTML = `
-    <div class="error">
-      ❌ ${escapeHTML(message)}
-    </div>
-  `;
-}
+      hideMessages();
+
+      if (!userId) {
+
+        showError("Sila masukkan Player ID Free Fire.");
+        return;
+
+      }
+
+      await checkGame(
+        "ff",
+        userId,
+        "",
+        server
+      );
+
+    }
 
 
-function escapeHTML(text) {
+    async function checkGame(
+      game,
+      userId,
+      zoneId,
+      server
+    ) {
 
-  return String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+      showLoading(true);
 
-}
+      try {
 
-</script>
+        const response = await fetch("/api/checker", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+            game: game,
+            userId: userId,
+            zoneId: zoneId,
+            server: server
+
+          })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+          showError(
+            data.message || "ID tidak dijumpai."
+          );
+
+          return;
+
+        }
+
+
+        showResult(data);
+
+      } catch (error) {
+
+        showError(
+          "Tidak dapat sambung ke server API."
+        );
+
+      } finally {
+
+        showLoading(false);
+
+      }
+
+    }
+
+  </script>
 
 </body>
 </html>
