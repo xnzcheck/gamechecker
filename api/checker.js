@@ -103,13 +103,9 @@ export default async function handler(req, res) {
         });
       }
 
-      const ffRegion =
-        server === "ID" ? "ID" : "SG";
-
       const url =
-        "https://ffdvinh09-info.vercel.app/player-info" +
-        "?region=" + encodeURIComponent(ffRegion) +
-        "&uid=" + encodeURIComponent(id);
+        "https://www.freefireapi.me/info" +
+        "?uid=" + encodeURIComponent(id);
 
       let response;
 
@@ -147,27 +143,38 @@ export default async function handler(req, res) {
         });
       }
 
-      if (!response.ok) {
-        console.error(
-          "FF HTTP ERROR:",
-          response.status,
-          data
-        );
+      console.log("FF DATA:", data);
 
+      if (!response.ok) {
         return res.status(404).json({
           success: false,
           message: "Player Free Fire tidak dijumpai"
         });
       }
 
+      // Cuba beberapa kemungkinan format response
       const player =
         data?.basicInfo ||
         data?.basicinfo ||
+        data?.playerInfo ||
+        data?.player ||
         data?.data?.basicInfo ||
-        data?.data?.basicinfo;
+        data?.data?.basicinfo ||
+        data?.data ||
+        data;
 
-      if (!player) {
-        console.error("FF BASIC INFO TIADA:", data);
+      const nickname =
+        player?.nickname ||
+        player?.nickName ||
+        player?.name ||
+        data?.nickname ||
+        data?.name;
+
+      if (!nickname) {
+        console.error(
+          "FF NICKNAME TIADA:",
+          data
+        );
 
         return res.status(404).json({
           success: false,
@@ -175,32 +182,31 @@ export default async function handler(req, res) {
         });
       }
 
-      const nickname =
-        player?.nickname ||
-        player?.nickName ||
-        player?.name;
+      const accountId =
+        player?.accountId ||
+        player?.accountid ||
+        player?.uid ||
+        data?.accountId ||
+        data?.accountid ||
+        id;
 
-      if (!nickname) {
-        return res.status(404).json({
-          success: false,
-          message: "Nickname Free Fire tidak dijumpai"
-        });
-      }
+      const playerRegion =
+        player?.region ||
+        data?.region ||
+        server;
+
+      const level =
+        player?.level ||
+        data?.level ||
+        null;
 
       return res.status(200).json({
         success: true,
         game: "ff",
-        id: String(
-          player?.accountId ||
-          player?.accountid ||
-          id
-        ),
-        server: String(
-          player?.region ||
-          ffRegion
-        ),
+        id: String(accountId),
+        server: String(playerRegion),
         name: String(nickname),
-        level: player?.level || null
+        level: level
       });
     }
 
@@ -217,4 +223,4 @@ export default async function handler(req, res) {
       message: "Server checker mengalami masalah"
     });
   }
-}
+          }
