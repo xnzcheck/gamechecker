@@ -1,8 +1,8 @@
 module.exports = async (req, res) => {
   try {
-    // =========================================
-    // METHOD CHECK
-    // =========================================
+    // ==============================
+    // METHOD
+    // ==============================
 
     if (req.method !== "POST") {
       return res.status(405).json({
@@ -11,9 +11,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    // =========================================
-    // GET DATA
-    // =========================================
+    // ==============================
+    // DATA
+    // ==============================
 
     const {
       game,
@@ -26,17 +26,19 @@ module.exports = async (req, res) => {
       .trim()
       .toLowerCase();
 
-    const id = String(userId || "").trim();
+    const id = String(userId || "")
+      .trim();
 
-    const zone = String(zoneId || "").trim();
+    const zone = String(zoneId || "")
+      .trim();
 
     const selectedServer = String(server || "SG")
       .trim()
       .toUpperCase();
 
-    // =========================================
-    // BASIC VALIDATION
-    // =========================================
+    // ==============================
+    // BASIC CHECK
+    // ==============================
 
     if (!gameName || !id) {
       return res.status(400).json({
@@ -45,9 +47,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    // =========================================
-    // MLBB
-    // =========================================
+    // ==================================================
+    // MOBILE LEGENDS
+    // ==================================================
 
     if (gameName === "mlbb") {
 
@@ -80,7 +82,7 @@ module.exports = async (req, res) => {
         encodeURIComponent(zone) +
         "&decode=false";
 
-      console.log("MLBB REQUEST:", apiUrl);
+      console.log("MLBB API:", apiUrl);
 
       let response;
 
@@ -102,6 +104,7 @@ module.exports = async (req, res) => {
       try {
         data = JSON.parse(rawText);
       } catch (error) {
+
         console.error(
           "MLBB INVALID JSON:",
           rawText.substring(0, 500)
@@ -113,27 +116,19 @@ module.exports = async (req, res) => {
         });
       }
 
-      console.log("MLBB RESPONSE:", data);
-
-      if (
-        !response.ok ||
-        data.success === false
-      ) {
-        return res.status(404).json({
-          success: false,
-          message: "ID MLBB tidak dijumpai."
-        });
-      }
-
       const nickname =
         data.name ||
         data.nickname ||
         data.username;
 
-      if (!nickname) {
+      if (
+        !response.ok ||
+        data.success === false ||
+        !nickname
+      ) {
         return res.status(404).json({
           success: false,
-          message: "Nickname MLBB tidak dijumpai."
+          message: "ID MLBB tidak dijumpai."
         });
       }
 
@@ -146,9 +141,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    // =========================================
+    // ==================================================
     // FREE FIRE
-    // =========================================
+    // ==================================================
 
     if (gameName === "ff") {
 
@@ -161,7 +156,7 @@ module.exports = async (req, res) => {
         });
       }
 
-      // Hanya SG atau ID
+      // Hanya SG / ID
       if (
         selectedServer !== "SG" &&
         selectedServer !== "ID"
@@ -173,215 +168,146 @@ module.exports = async (req, res) => {
         });
       }
 
-      // =====================================
-      // API #1
-      // =====================================
+      // ==============================
+      // FREE FIRE API
+      // ==============================
 
-      const api1 =
-        "https://freefireinfo-zy9l.onrender.com/api/v1/player-profile" +
-        "?uid=" +
-        encodeURIComponent(id) +
-        "&server=" +
-        encodeURIComponent(selectedServer);
-
-      console.log("FREE FIRE API #1:", api1);
-
-      let response1 = null;
-      let data1 = null;
-
-      try {
-
-        response1 = await fetch(api1, {
-          signal: AbortSignal.timeout(10000)
-        });
-
-        const text1 = await response1.text();
-
-        console.log(
-          "FREE FIRE API #1 STATUS:",
-          response1.status
-        );
-
-        try {
-          data1 = JSON.parse(text1);
-        } catch (error) {
-          console.error(
-            "FREE FIRE API #1 INVALID JSON:",
-            text1.substring(0, 300)
-          );
-        }
-
-      } catch (error) {
-
-        console.error(
-          "FREE FIRE API #1 ERROR:",
-          error.message
-        );
-      }
-
-      // =====================================
-      // CHECK API #1
-      // =====================================
-
-      if (data1) {
-
-        const player1 =
-          data1.basicinfo ||
-          data1.basicInfo ||
-          data1.data?.basicinfo ||
-          data1.data?.basicInfo;
-
-        if (
-          player1 &&
-          (
-            player1.nickname ||
-            player1.nickName ||
-            player1.name
-          )
-        ) {
-
-          const nickname =
-            player1.nickname ||
-            player1.nickName ||
-            player1.name;
-
-          return res.status(200).json({
-            success: true,
-            game: "ff",
-            id:
-              player1.accountid ||
-              player1.accountId ||
-              id,
-            server:
-              player1.region ||
-              selectedServer,
-            name: nickname,
-            level:
-              player1.level ||
-              null,
-            createAt:
-              player1.createat ||
-              player1.createAt ||
-              null
-          });
-        }
-      }
-
-      // =====================================
-      // API #2 FALLBACK
-      // =====================================
-
-      const api2 =
-        "https://free-ff-api-src-5plp.onrender.com/api/v1/account" +
+      const apiUrl =
+        "https://ffdvinh09-info.vercel.app/player-info" +
         "?region=" +
         encodeURIComponent(selectedServer) +
         "&uid=" +
         encodeURIComponent(id);
 
       console.log(
-        "FREE FIRE API #2:",
-        api2
+        "FREE FIRE API:",
+        apiUrl
       );
 
-      let response2 = null;
-      let data2 = null;
+      let response;
 
       try {
 
-        response2 = await fetch(api2, {
-          signal: AbortSignal.timeout(10000)
+        response = await fetch(apiUrl, {
+          signal: AbortSignal.timeout(15000)
         });
-
-        const text2 = await response2.text();
-
-        console.log(
-          "FREE FIRE API #2 STATUS:",
-          response2.status
-        );
-
-        try {
-          data2 = JSON.parse(text2);
-        } catch (error) {
-          console.error(
-            "FREE FIRE API #2 INVALID JSON:",
-            text2.substring(0, 300)
-          );
-        }
 
       } catch (error) {
 
         console.error(
-          "FREE FIRE API #2 ERROR:",
-          error.message
+          "FREE FIRE FETCH ERROR:",
+          error
         );
+
+        return res.status(502).json({
+          success: false,
+          message:
+            "API Free Fire tidak dapat dihubungi."
+        });
       }
 
-      // =====================================
-      // CHECK API #2
-      // =====================================
+      const rawText = await response.text();
 
-      if (data2) {
-
-        const player2 =
-          data2.basicInfo ||
-          data2.basicinfo ||
-          data2.data?.basicInfo ||
-          data2.data?.basicinfo;
-
-        if (
-          player2 &&
-          (
-            player2.nickname ||
-            player2.nickName ||
-            player2.name
-          )
-        ) {
-
-          const nickname =
-            player2.nickname ||
-            player2.nickName ||
-            player2.name;
-
-          return res.status(200).json({
-            success: true,
-            game: "ff",
-            id:
-              player2.accountId ||
-              player2.accountid ||
-              id,
-            server:
-              player2.region ||
-              selectedServer,
-            name: nickname,
-            level:
-              player2.level ||
-              null,
-            createAt:
-              player2.createAt ||
-              player2.createat ||
-              null
-          });
-        }
-      }
-
-      // =====================================
-      // BOTH API FAILED
-      // =====================================
-
-      console.error(
-        "FREE FIRE BOTH API FAILED"
+      console.log(
+        "FREE FIRE STATUS:",
+        response.status
       );
 
-      return res.status(502).json({
-        success: false,
-        message:
-          "API Free Fire tidak dapat dihubungi sekarang. Cuba lagi sebentar."
+      let data;
+
+      try {
+
+        data = JSON.parse(rawText);
+
+      } catch (error) {
+
+        console.error(
+          "FREE FIRE INVALID JSON:",
+          rawText.substring(0, 500)
+        );
+
+        return res.status(502).json({
+          success: false,
+          message:
+            "API Free Fire mengembalikan data yang tidak sah."
+        });
+      }
+
+      console.log(
+        "FREE FIRE RESPONSE:",
+        data
+      );
+
+      // ==============================
+      // BASIC INFO
+      // ==============================
+
+      const player =
+        data.basicInfo ||
+        data.basicinfo ||
+        data.data?.basicInfo ||
+        data.data?.basicinfo;
+
+      if (
+        !response.ok ||
+        !player
+      ) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "ID Free Fire tidak dijumpai di server " +
+            selectedServer +
+            "."
+        });
+      }
+
+      // ==============================
+      // NICKNAME
+      // ==============================
+
+      const nickname =
+        player.nickname ||
+        player.nickName ||
+        player.name;
+
+      if (!nickname) {
+
+        return res.status(404).json({
+          success: false,
+          message:
+            "Nickname Free Fire tidak dijumpai."
+        });
+      }
+
+      // ==============================
+      // BERJAYA
+      // ==============================
+
+      return res.status(200).json({
+        success: true,
+        game: "ff",
+        id:
+          player.accountId ||
+          player.accountid ||
+          id,
+        server:
+          player.region ||
+          selectedServer,
+        name: nickname,
+        level:
+          player.level ||
+          null,
+        createAt:
+          player.createAt ||
+          player.createat ||
+          null
       });
     }
 
-    // =========================================
-    // GAME NOT SUPPORTED
-    // =========================================
+    // ==================================================
+    // GAME TIDAK DISOKONG
+    // ==================================================
 
     return res.status(400).json({
       success: false,
