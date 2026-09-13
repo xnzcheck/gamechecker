@@ -4,360 +4,506 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>XNZ CHECK</title>
+  <title>XNZ CHECK — MLBB Checker</title>
 
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f5d76e;
+      --gold-dark: #8d6d16;
+      --black: #050505;
+      --card: #0d0d0d;
+      --border: rgba(212,175,55,.22);
+      --text: #f5f5f5;
+      --muted: #8c8c8c;
     }
 
     body {
       min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at top, #3a2a08 0%, #111 35%, #050505 75%);
-      color: #fff;
-      padding: 20px;
+        radial-gradient(circle at 50% -10%, rgba(212,175,55,.18), transparent 35%),
+        radial-gradient(circle at 0% 100%, rgba(212,175,55,.07), transparent 30%),
+        #030303;
+      overflow-x: hidden;
+    }
+
+    /* GOLD GLOW */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(212,175,55,.025) 50%,
+          transparent 100%
+        );
     }
 
     .container {
-      width: 100%;
-      max-width: 460px;
-      margin: 0 auto;
+      width: min(94%, 650px);
+      margin: auto;
+      padding: 28px 0 35px;
     }
 
     /* HEADER */
-
     .header {
       text-align: center;
-      padding: 30px 15px 25px;
+      padding: 22px 10px 28px;
+    }
+
+    .crown {
+      font-size: 28px;
+      margin-bottom: 5px;
+      filter: drop-shadow(0 0 10px rgba(212,175,55,.4));
     }
 
     .logo {
-      width: 75px;
-      height: 75px;
-      margin: 0 auto 15px;
-      border-radius: 22px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background: linear-gradient(145deg, #ffd76a, #b8860b);
-      color: #080808;
-
-      font-size: 25px;
-      font-weight: 900;
-
-      box-shadow:
-        0 0 25px rgba(255, 193, 7, 0.35);
+      font-size: clamp(38px, 11vw, 58px);
+      font-weight: 1000;
+      letter-spacing: 7px;
+      background: linear-gradient(
+        135deg,
+        #fff0a6,
+        #d4af37 45%,
+        #8d6d16
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 35px rgba(212,175,55,.16);
     }
 
-    .header h1 {
-      font-size: 32px;
-      letter-spacing: 3px;
-      color: #ffd45a;
-      text-shadow: 0 0 15px rgba(255, 196, 60, 0.35);
-    }
-
-    .header p {
+    .tagline {
       margin-top: 8px;
-      color: #aaa;
-      font-size: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .gold-line {
+      width: 90px;
+      height: 2px;
+      margin: 18px auto 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+      );
     }
 
     /* MAIN CARD */
-
-    .card {
-      background: rgba(17, 17, 17, 0.96);
-      border: 1px solid #5d450d;
-      border-radius: 22px;
-      padding: 22px;
-
+    .main-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(
+        145deg,
+        rgba(20,20,20,.98),
+        rgba(7,7,7,.98)
+      );
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
       box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.65),
-        inset 0 1px rgba(255, 215, 90, 0.06);
+        0 20px 70px rgba(0,0,0,.65),
+        0 0 45px rgba(212,175,55,.04);
     }
 
-    .title {
-      text-align: center;
-      color: #ffd45a;
-      font-size: 19px;
+    .main-card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      top: -100px;
+      right: -80px;
+      border-radius: 50%;
+      background: rgba(212,175,55,.09);
+      filter: blur(30px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--gold-light);
+      background: rgba(212,175,55,.06);
+      font-size: 11px;
       font-weight: bold;
+      letter-spacing: 1px;
       margin-bottom: 18px;
     }
 
-    /* GAME BUTTON */
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #45e98b;
+      box-shadow: 0 0 10px #45e98b;
+    }
 
-    .games {
-      display: flex;
-      gap: 10px;
+    .title {
+      font-size: 25px;
+      font-weight: 900;
+      margin-bottom: 7px;
+    }
+
+    .description {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
       margin-bottom: 22px;
     }
 
-    .game-btn {
-      flex: 1;
-      border: 1px solid #4f3a0b;
-      border-radius: 13px;
-      padding: 14px 8px;
-
-      background: #111;
-      color: #aaa;
-
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-
-      transition: 0.2s;
-    }
-
-    .game-btn.active {
-      background: linear-gradient(135deg, #ffd866, #b8860b);
-      color: #080808;
-      border-color: #ffd866;
-
-      box-shadow:
-        0 0 18px rgba(255, 200, 50, 0.25);
-    }
-
-    .game-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* FORM */
-
-    .form-group {
+    /* INPUT */
+    .field {
       margin-bottom: 16px;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
-      color: #d5d5d5;
-      font-size: 13px;
+      color: #c5c5c5;
+      font-size: 12px;
       font-weight: bold;
+      margin-bottom: 8px;
+      letter-spacing: .5px;
     }
 
-    input,
-    select {
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 16px;
+    }
+
+    input {
       width: 100%;
-      padding: 15px;
-
-      background: #080808;
-      color: #fff;
-
-      border: 1px solid #46360f;
-      border-radius: 12px;
-
+      height: 52px;
+      border-radius: 13px;
+      border: 1px solid #292929;
       outline: none;
+      background: #080808;
+      color: white;
+      padding: 0 15px 0 43px;
       font-size: 15px;
-
-      transition: 0.2s;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: #d9a928;
-      box-shadow: 0 0 12px rgba(218, 169, 40, 0.15);
+      transition: .25s;
     }
 
     input::placeholder {
-      color: #666;
+      color: #555;
     }
 
-    /* CHECK BUTTON */
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,.07);
+    }
 
-    .check-btn {
+    /* BUTTON */
+    .check-button {
+      position: relative;
       width: 100%;
-      margin-top: 5px;
-
-      border: none;
-      border-radius: 13px;
-
-      padding: 16px;
-
-      background: linear-gradient(135deg, #ffe27a, #c59620, #9b6f08);
-      color: #080808;
-
-      font-size: 16px;
-      font-weight: 900;
-
+      height: 54px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 14px;
       cursor: pointer;
-
+      overflow: hidden;
+      color: #080808;
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      background: linear-gradient(
+        135deg,
+        var(--gold-light),
+        var(--gold),
+        var(--gold-dark)
+      );
       box-shadow:
-        0 8px 25px rgba(218, 169, 40, 0.18);
-
-      transition: 0.2s;
+        0 10px 30px rgba(212,175,55,.16);
+      transition: .25s;
     }
 
-    .check-btn:hover {
-      filter: brightness(1.08);
+    .check-button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 14px 35px rgba(212,175,55,.24);
     }
 
-    .check-btn:active {
-      transform: scale(0.98);
+    .check-button:active {
+      transform: scale(.98);
     }
 
-    .check-btn:disabled {
-      opacity: 0.55;
+    .check-button:disabled {
+      opacity: .55;
       cursor: not-allowed;
+      transform: none;
     }
 
-    /* MESSAGE */
-
-    .message {
+    /* LOADING */
+    .loading {
       display: none;
-      margin-top: 16px;
-
-      padding: 13px;
-      border-radius: 11px;
-
       text-align: center;
+      padding: 22px 0 5px;
+      color: var(--gold-light);
       font-size: 13px;
     }
 
-    .message.show {
-      display: block;
+    .spinner {
+      width: 25px;
+      height: 25px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      border: 3px solid #292929;
+      border-top-color: var(--gold);
+      animation: spin .8s linear infinite;
     }
 
-    .message.success {
-      background: rgba(40, 180, 90, 0.12);
-      border: 1px solid rgba(70, 210, 120, 0.25);
-      color: #8dffb3;
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
-    .message.error {
-      background: rgba(220, 50, 50, 0.12);
-      border: 1px solid rgba(220, 70, 70, 0.25);
-      color: #ff9c9c;
+    /* ERROR */
+    .error {
+      display: none;
+      margin-top: 15px;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid #632222;
+      background: rgba(90,15,15,.2);
+      color: #ff8585;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     /* RESULT */
-
     .result {
       display: none;
       margin-top: 18px;
-
+      padding: 22px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
       background: #090909;
-      border: 1px solid #4b390e;
-      border-radius: 15px;
-      padding: 17px;
+      animation: resultIn .35s ease;
     }
 
-    .result.show {
-      display: block;
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .result-title {
-      color: #ffd45a;
-      font-weight: bold;
-      margin-bottom: 12px;
-      font-size: 16px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-
-      padding: 11px 0;
+    .result-header {
+      text-align: center;
+      padding-bottom: 18px;
       border-bottom: 1px solid #222;
-      font-size: 13px;
     }
 
-    .row:last-child {
-      border-bottom: none;
-    }
-
-    .row span:first-child {
-      color: #777;
-    }
-
-    .row span:last-child {
-      color: #eee;
+    .verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #55e995;
+      font-size: 11px;
       font-weight: bold;
-      text-align: right;
+      margin-bottom: 9px;
+      letter-spacing: 1px;
+    }
+
+    .nickname {
+      color: var(--gold-light);
+      font-size: 27px;
+      font-weight: 1000;
       word-break: break-word;
     }
 
-    /* SUPPORT */
+    .result-id {
+      color: #777;
+      font-size: 12px;
+      margin-top: 6px;
+    }
 
-    .support {
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .result-item {
+      padding: 14px;
+      border-radius: 12px;
+      background: #0e0e0e;
+      border: 1px solid #202020;
+    }
+
+    .result-label {
+      color: #666;
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      letter-spacing: 1px;
+    }
+
+    .result-value {
+      color: #eee;
+      font-size: 14px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    /* SECURITY */
+    .security {
       margin-top: 18px;
-
-      padding: 18px;
-
-      border-radius: 16px;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(184, 134, 11, 0.14),
-          rgba(0, 0, 0, 0.2)
-        );
-
-      border: 1px solid #4e3a0c;
-      text-align: center;
+      padding: 16px;
+      border-radius: 13px;
+      border: 1px solid #332b16;
+      background: rgba(212,175,55,.035);
     }
 
-    .support-icon {
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
-
-    .support h3 {
-      color: #ffd45a;
-      font-size: 16px;
+    .security-title {
+      color: var(--gold-light);
+      font-weight: 900;
+      font-size: 13px;
       margin-bottom: 7px;
     }
 
-    .support p {
-      color: #999;
+    .security-text {
+      color: #888;
       font-size: 12px;
       line-height: 1.6;
     }
 
-    .phone {
-      display: inline-block;
-      margin-top: 10px;
-
-      color: #ffe079;
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      text-decoration: none;
+    /* REPORT */
+    .report-card {
+      margin-top: 18px;
+      padding: 21px;
+      border-radius: 20px;
+      border: 1px solid #252525;
+      background: linear-gradient(
+        145deg,
+        #0e0e0e,
+        #080808
+      );
     }
 
-    .phone:hover {
-      text-decoration: underline;
+    .report-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 12px;
+    }
+
+    .report-icon {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(212,175,55,.1);
+      border: 1px solid var(--border);
+      font-size: 20px;
+    }
+
+    .report-title {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .report-desc {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .whatsapp {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 50px;
+      border-radius: 13px;
+      text-decoration: none;
+      color: #071009;
+      background: linear-gradient(
+        135deg,
+        #55e995,
+        #27c66d
+      );
+      font-size: 14px;
+      font-weight: 900;
+      transition: .25s;
+    }
+
+    .whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(39,198,109,.16);
     }
 
     /* FOOTER */
-
     .footer {
       text-align: center;
-      padding: 22px 5px 10px;
-      color: #555;
+      padding: 25px 10px 0;
+      color: #444;
       font-size: 11px;
+      line-height: 1.6;
     }
 
-    .hidden {
-      display: none !important;
+    .footer strong {
+      color: #777;
     }
 
-    @media (max-width: 380px) {
-      .header h1 {
-        font-size: 27px;
+    @media (max-width: 480px) {
+
+      .container {
+        width: 92%;
+        padding-top: 15px;
       }
 
-      .card {
-        padding: 17px;
+      .main-card {
+        padding: 19px;
+        border-radius: 20px;
       }
 
-      .game-btn {
-        font-size: 11px;
+      .result {
+        padding: 18px;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .title {
+        font-size: 22px;
       }
     }
   </style>
@@ -368,85 +514,80 @@
   <div class="container">
 
     <!-- HEADER -->
+    <header class="header">
 
-    <div class="header">
+      <div class="crown">♛</div>
 
       <div class="logo">
-        XNZ
+        XNZ CHECK
       </div>
 
-      <h1>XNZ CHECK</h1>
+      <div class="tagline">
+        Mobile Legends Account Checker
+      </div>
 
-      <p>Game ID Checker</p>
+      <div class="gold-line"></div>
 
-    </div>
+    </header>
 
 
     <!-- CHECKER -->
+    <main class="main-card">
 
-    <div class="card">
+      <div class="badge">
+        <span class="dot"></span>
+        CHECKER ONLINE
+      </div>
 
       <div class="title">
-        CHECK PLAYER ID
+        Mobile Legends
+      </div>
+
+      <div class="description">
+        Masukkan Player ID dan Zone ID untuk menyemak
+        nickname akaun Mobile Legends anda.
       </div>
 
 
-      <!-- GAME -->
+      <!-- PLAYER ID -->
+      <div class="field">
 
-      <div class="games">
+        <label>
+          PLAYER ID
+        </label>
 
-        <button
-          type="button"
-          id="mlBtn"
-          class="game-btn active"
-        >
-          MOBILE LEGENDS
-        </button>
+        <div class="input-wrap">
 
-        <button
-          type="button"
-          id="ffBtn"
-          class="game-btn"
-        >
-          FREE FIRE
-        </button>
-
-      </div>
-
-
-      <!-- MLBB -->
-
-      <div id="mlForm">
-
-        <div class="form-group">
-
-          <label for="mlId">
-            USER ID
-          </label>
+          <span class="input-icon">◈</span>
 
           <input
+            type="text"
             id="mlId"
-            type="text"
             inputmode="numeric"
-            placeholder="Masukkan User ID"
-            autocomplete="off"
+            placeholder="Contoh: 123456789"
           >
 
         </div>
 
+      </div>
 
-        <div class="form-group">
 
-          <label for="mlZone">
-            ZONE ID
-          </label>
+      <!-- ZONE ID -->
+      <div class="field">
+
+        <label>
+          ZONE ID
+        </label>
+
+        <div class="input-wrap">
+
+          <span class="input-icon">◇</span>
 
           <input
+            type="text"
             id="mlZone"
-            type="text"
             inputmode="numeric"
-            placeholder="Masukkan Zone ID"
-            autocomplete="off"
+            placeholder="Contoh: 1234"
           >
 
         </div>
@@ -454,519 +595,376 @@
       </div>
 
 
-      <!-- FREE FIRE -->
-
-      <div
-        id="ffForm"
-        class="hidden"
-      >
-
-        <div class="form-group">
-
-          <label for="ffId">
-            PLAYER ID
-          </label>
-
-          <input
-            id="ffId"
-            type="text"
-            inputmode="numeric"
-            placeholder="Masukkan Player ID"
-            autocomplete="off"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="ffServer">
-            SERVER
-          </label>
-
-          <select id="ffServer">
-
-            <option value="SG">
-              Singapore (SG)
-            </option>
-
-            <option value="ID">
-              Indonesia (ID)
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-
-      <!-- CHECK -->
-
+      <!-- BUTTON -->
       <button
-        type="button"
-        id="checkBtn"
-        class="check-btn"
+        class="check-button"
+        id="checkButton"
+        onclick="checkML()"
       >
-        CHECK ID
+        CHECK ACCOUNT
       </button>
 
 
-      <!-- MESSAGE -->
-
+      <!-- LOADING -->
       <div
-        id="message"
-        class="message"
+        class="loading"
+        id="loading"
+      >
+
+        <div class="spinner"></div>
+
+        Sedang menyemak akaun...
+
+      </div>
+
+
+      <!-- ERROR -->
+      <div
+        class="error"
+        id="error"
       ></div>
 
 
       <!-- RESULT -->
-
       <div
-        id="result"
         class="result"
+        id="result"
       >
 
-        <div class="result-title">
-          ✓ PLAYER FOUND
+        <div class="result-header">
+
+          <div class="verified">
+            ● ACCOUNT FOUND
+          </div>
+
+          <div
+            class="nickname"
+            id="nickname"
+          >
+            -
+          </div>
+
+          <div class="result-id">
+            Player ID:
+            <span id="resultId">-</span>
+          </div>
+
         </div>
 
 
-        <div class="row">
-          <span>GAME</span>
-          <span id="resultGame">-</span>
+        <div class="result-grid">
+
+          <div class="result-item">
+
+            <div class="result-label">
+              Game
+            </div>
+
+            <div
+              class="result-value"
+              id="resultGame"
+            >
+              Mobile Legends
+            </div>
+
+          </div>
+
+
+          <div class="result-item">
+
+            <div class="result-label">
+              Zone ID
+            </div>
+
+            <div
+              class="result-value"
+              id="resultZone"
+            >
+              -
+            </div>
+
+          </div>
+
+
+          <div class="result-item">
+
+            <div class="result-label">
+              Nickname
+            </div>
+
+            <div
+              class="result-value"
+              id="resultNickname"
+            >
+              -
+            </div>
+
+          </div>
+
+
+          <div class="result-item">
+
+            <div class="result-label">
+              Status
+            </div>
+
+            <div
+              class="result-value"
+              style="color:#55e995"
+            >
+              ACCOUNT FOUND
+            </div>
+
+          </div>
+
         </div>
 
 
-        <div class="row">
-          <span>ID</span>
-          <span id="resultId">-</span>
-        </div>
+        <div class="security">
 
+          <div class="security-title">
+            🛡 SECURITY INFORMATION
+          </div>
 
-        <div class="row">
-          <span>SERVER / ZONE</span>
-          <span id="resultServer">-</span>
-        </div>
+          <div class="security-text">
+            XNZ CHECK hanya mengesahkan maklumat akaun
+            yang diberikan oleh sistem checker. Status
+            penggunaan cheat tidak boleh dipastikan hanya
+            melalui Player ID.
+          </div>
 
-
-        <div class="row">
-          <span>NICKNAME</span>
-          <span id="resultName">-</span>
-        </div>
-
-
-        <div
-          id="levelRow"
-          class="row hidden"
-        >
-          <span>LEVEL</span>
-          <span id="resultLevel">-</span>
         </div>
 
       </div>
 
-    </div>
+    </main>
 
 
-    <!-- SUPPORT -->
+    <!-- REPORT BUG -->
+    <section class="report-card">
 
-    <div class="support">
+      <div class="report-top">
 
-      <div class="support-icon">
-        🛠️
+        <div class="report-icon">
+          ⚠
+        </div>
+
+        <div>
+          <div class="report-title">
+            Report Bug / Kesalahan
+          </div>
+        </div>
+
       </div>
 
-      <h3>
-        PERTANYAAN / REPORT BUG
-      </h3>
+      <div class="report-desc">
+        Ada masalah dengan checker atau jumpa kesalahan
+        dalam website? Hubungi kami terus melalui WhatsApp.
+        Mesej laporan sudah disediakan secara automatik.
+      </div>
 
-      <p>
-        Jika terdapat masalah, bug atau error
-        pada website, sila hubungi nombor di bawah.
-      </p>
 
       <a
-        class="phone"
-        href="tel:0143783301"
+        class="whatsapp"
+        href="https://wa.me/60143783301?text=Hello%20XNZ%20CHECK%2C%20saya%20ingin%20melaporkan%20bug%20atau%20kesalahan%20dalam%20website.%0A%0AMasalah%20saya%3A%20"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        📞 0143783301
+        <span>💬</span>
+        REPORT VIA WHATSAPP
       </a>
 
-    </div>
+    </section>
 
 
     <!-- FOOTER -->
+    <footer class="footer">
 
-    <div class="footer">
-      XNZ CHECK © 2026
-    </div>
+      <strong>XNZ CHECK</strong><br>
+
+      Mobile Legends Account Checker<br>
+
+      © 2026 XNZ CHECK. All Rights Reserved.
+
+    </footer>
 
   </div>
 
 
-  <!-- JAVASCRIPT -->
-
   <script>
 
-    let currentGame = "ml";
+    async function checkML() {
 
+      const id =
+        document.getElementById("mlId")
+          .value.trim();
 
-    const mlBtn =
-      document.getElementById("mlBtn");
+      const zone =
+        document.getElementById("mlZone")
+          .value.trim();
 
-    const ffBtn =
-      document.getElementById("ffBtn");
+      const button =
+        document.getElementById("checkButton");
 
-    const mlForm =
-      document.getElementById("mlForm");
+      const loading =
+        document.getElementById("loading");
 
-    const ffForm =
-      document.getElementById("ffForm");
+      const error =
+        document.getElementById("error");
 
-    const checkBtn =
-      document.getElementById("checkBtn");
+      const result =
+        document.getElementById("result");
 
-    const message =
-      document.getElementById("message");
 
-    const result =
-      document.getElementById("result");
+      // RESET
+      error.style.display = "none";
+      result.style.display = "none";
 
 
-    /* RESULT ELEMENTS */
+      // VALIDATE ID
+      if (!id) {
 
-    const resultGame =
-      document.getElementById("resultGame");
+        error.textContent =
+          "Sila masukkan Player ID.";
 
-    const resultId =
-      document.getElementById("resultId");
+        error.style.display = "block";
 
-    const resultServer =
-      document.getElementById("resultServer");
+        return;
+      }
 
-    const resultName =
-      document.getElementById("resultName");
 
-    const resultLevel =
-      document.getElementById("resultLevel");
+      // VALIDATE ZONE
+      if (!zone) {
 
-    const levelRow =
-      document.getElementById("levelRow");
+        error.textContent =
+          "Sila masukkan Zone ID.";
 
+        error.style.display = "block";
 
-    /* =========================
-       GAME ML
-    ========================= */
+        return;
+      }
 
-    mlBtn.addEventListener("click", () => {
 
-      currentGame = "ml";
+      // NUMBER ONLY
+      if (!/^[0-9]+$/.test(id)) {
 
-      mlBtn.classList.add("active");
-      ffBtn.classList.remove("active");
+        error.textContent =
+          "Player ID mesti nombor sahaja.";
 
-      mlForm.classList.remove("hidden");
-      ffForm.classList.add("hidden");
+        error.style.display = "block";
 
-      clearAll();
+        return;
+      }
 
-    });
 
+      if (!/^[0-9]+$/.test(zone)) {
 
-    /* =========================
-       GAME FF
-    ========================= */
+        error.textContent =
+          "Zone ID mesti nombor sahaja.";
 
-    ffBtn.addEventListener("click", () => {
+        error.style.display = "block";
 
-      currentGame = "ff";
+        return;
+      }
 
-      ffBtn.classList.add("active");
-      mlBtn.classList.remove("active");
 
-      ffForm.classList.remove("hidden");
-      mlForm.classList.add("hidden");
+      // LOADING
+      button.disabled = true;
 
-      clearAll();
+      button.textContent =
+        "CHECKING...";
 
-    });
+      loading.style.display = "block";
 
 
-    /* =========================
-       MESSAGE
-    ========================= */
+      try {
 
-    function showMessage(text, type) {
+        const response =
+          await fetch("/api/checker", {
 
-      message.textContent = text;
+            method: "POST",
 
-      message.className =
-        "message show " + type;
+            headers: {
+              "Content-Type": "application/json"
+            },
 
-    }
+            body: JSON.stringify({
 
+              game: "ml",
 
-    function clearMessage() {
+              id: id,
 
-      message.textContent = "";
+              zone: zone
 
-      message.className = "message";
+            })
 
-    }
+          });
 
 
-    /* =========================
-       RESULT
-    ========================= */
+        const data =
+          await response.json();
 
-    function clearResult() {
 
-      result.classList.remove("show");
+        if (!response.ok || !data.success) {
 
-      resultGame.textContent = "-";
-      resultId.textContent = "-";
-      resultServer.textContent = "-";
-      resultName.textContent = "-";
-      resultLevel.textContent = "-";
-
-      levelRow.classList.add("hidden");
-
-    }
-
-
-    function clearAll() {
-
-      clearMessage();
-      clearResult();
-
-    }
-
-
-    /* =========================
-       CHECK
-    ========================= */
-
-    checkBtn.addEventListener(
-      "click",
-      async () => {
-
-        clearAll();
-
-
-        let payload;
-
-
-        /* MLBB */
-
-        if (currentGame === "ml") {
-
-          const id =
-            document
-              .getElementById("mlId")
-              .value
-              .trim();
-
-          const zone =
-            document
-              .getElementById("mlZone")
-              .value
-              .trim();
-
-
-          if (!id) {
-
-            showMessage(
-              "Sila masukkan User ID.",
-              "error"
-            );
-
-            return;
-          }
-
-
-          if (!zone) {
-
-            showMessage(
-              "Sila masukkan Zone ID.",
-              "error"
-            );
-
-            return;
-          }
-
-
-          payload = {
-
-            game: "ml",
-
-            id: id,
-
-            zone: zone
-
-          };
-
-        }
-
-
-        /* FREE FIRE */
-
-        if (currentGame === "ff") {
-
-          const id =
-            document
-              .getElementById("ffId")
-              .value
-              .trim();
-
-          const server =
-            document
-              .getElementById("ffServer")
-              .value;
-
-
-          if (!id) {
-
-            showMessage(
-              "Sila masukkan Player ID.",
-              "error"
-            );
-
-            return;
-          }
-
-
-          if (!/^[0-9]+$/.test(id)) {
-
-            showMessage(
-              "Player ID mesti nombor sahaja.",
-              "error"
-            );
-
-            return;
-          }
-
-
-          payload = {
-
-            game: "ff",
-
-            id: id,
-
-            playerId: id,
-
-            server: server
-
-          };
-
-        }
-
-
-        /* LOADING */
-
-        checkBtn.disabled = true;
-
-        checkBtn.textContent =
-          "CHECKING...";
-
-
-        try {
-
-          const response =
-            await fetch(
-              "/api/checker",
-              {
-
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-
-                body:
-                  JSON.stringify(payload)
-
-              }
-            );
-
-
-          const data =
-            await response.json();
-
-
-          if (
-            !response.ok ||
-            !data.success
-          ) {
-
-            throw new Error(
-              data.message ||
-              "ID tidak dapat disemak."
-            );
-
-          }
-
-
-          /* RESULT */
-
-          resultGame.textContent =
-            data.game === "ff"
-              ? "FREE FIRE"
-              : "MOBILE LEGENDS";
-
-
-          resultId.textContent =
-            data.id || "-";
-
-
-          resultServer.textContent =
-            data.server || "-";
-
-
-          resultName.textContent =
-            data.name || "-";
-
-
-          if (data.level) {
-
-            resultLevel.textContent =
-              data.level;
-
-            levelRow.classList.remove(
-              "hidden"
-            );
-
-          }
-
-
-          result.classList.add("show");
-
-
-          showMessage(
-            "Player berjaya dijumpai!",
-            "success"
-          );
-
-
-        } catch (error) {
-
-          showMessage(
-            error.message ||
-            "Tidak dapat menyemak ID.",
-            "error"
+          throw new Error(
+            data.message ||
+            "Akaun tidak dijumpai."
           );
 
         }
 
 
-        checkBtn.disabled = false;
+        // RESULT
+        document.getElementById("nickname")
+          .textContent =
+          data.name || "Unknown";
 
-        checkBtn.textContent =
-          "CHECK ID";
+        document.getElementById("resultNickname")
+          .textContent =
+          data.name || "Unknown";
+
+        document.getElementById("resultId")
+          .textContent =
+          data.id || id;
+
+        document.getElementById("resultZone")
+          .textContent =
+          data.server || zone;
+
+
+        result.style.display = "block";
+
+
+        result.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+
+      } catch (err) {
+
+        console.error(err);
+
+        error.textContent =
+          err.message ||
+          "Server checker mengalami masalah.";
+
+        error.style.display = "block";
+
+
+      } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+          "CHECK ACCOUNT";
+
+        loading.style.display = "none";
 
       }
-    );
+
+    }
 
   </script>
 
