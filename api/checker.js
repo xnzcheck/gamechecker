@@ -1,12 +1,12 @@
 module.exports = async (req, res) => {
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      success: false,
-      message: "Method not allowed"
-    });
-  }
-
   try {
+    if (req.method !== "POST") {
+      return res.status(405).json({
+        success: false,
+        message: "Method not allowed"
+      });
+    }
+
     const { game, userId, zoneId } = req.body || {};
 
     if (!game || !userId) {
@@ -27,15 +27,13 @@ module.exports = async (req, res) => {
       }
 
       apiUrl =
-        "https://api.isan.eu.org/nickname/ml" +
-        "?id=" + encodeURIComponent(userId) +
-        "&server=" + encodeURIComponent(zoneId);
+        `https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(userId)}` +
+        `&server=${encodeURIComponent(zoneId)}&decode=false`;
 
     } else if (game === "ff") {
-
       apiUrl =
-        "https://api.isan.eu.org/nickname/ff" +
-        "?id=" + encodeURIComponent(userId);
+        `https://api.isan.eu.org/nickname/ff?id=${encodeURIComponent(userId)}` +
+        `&decode=false`;
 
     } else {
       return res.status(400).json({
@@ -56,14 +54,13 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      game: game,
+      game: data.game || game,
       id: data.id || userId,
       server: data.server || zoneId || null,
       name: data.name || "Tidak diketahui"
     });
 
   } catch (error) {
-
     console.error(error);
 
     return res.status(500).json({
