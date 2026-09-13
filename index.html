@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>XNZ Check</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080b12;
+      color: white;
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 450px;
+      background: #111722;
+      padding: 25px;
+      border-radius: 20px;
+      border: 1px solid #283449;
+      box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 45px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #8993a7;
+    }
+
+    .games {
+      display: flex;
+      gap: 10px;
+      margin: 25px 0;
+    }
+
+    .games button {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #303b51;
+      border-radius: 10px;
+      background: #181f2d;
+      color: white;
+      font-weight: bold;
+    }
+
+    .games button.active {
+      background: #315ea8;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #303b51;
+      background: #080d15;
+      color: white;
+      font-size: 16px;
+    }
+
+    .check {
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #315ea8;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 18px;
+      background: #080d15;
+      border-radius: 12px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #202938;
+    }
+
+    .row span {
+      color: #8993a7;
+    }
+
+    .error {
+      margin-top: 15px;
+      padding: 12px;
+      background: #401b24;
+      border-radius: 10px;
+      color: #ffb7c0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card">
+
+    <div class="logo">🎮</div>
+
+    <h1>XNZ CHECK</h1>
+
+    <div class="subtitle">
+      MLBB & Free Fire Checker
+    </div>
+
+    <div class="games">
+
+      <button
+        id="mlbbButton"
+        class="active"
+        onclick="selectGame('mlbb')">
+        🔵 MLBB
+      </button>
+
+      <button
+        id="ffButton"
+        onclick="selectGame('freefire')">
+        🔴 FREE FIRE
+      </button>
+
+    </div>
+
+    <label id="idLabel">
+      User ID
+    </label>
+
+    <input
+      id="userId"
+      type="text"
+      placeholder="Masukkan User ID">
+
+    <div id="zoneBox">
+
+      <label>
+        Zone ID
+      </label>
+
+      <input
+        id="zoneId"
+        type="text"
+        placeholder="Masukkan Zone ID">
+
+    </div>
+
+    <button
+      class="check"
+      onclick="checkAccount()">
+
+      CHECK ACCOUNT
+
+    </button>
+
+    <div id="message"></div>
+
+    <div
+      id="result"
+      class="result"
+      style="display:none;">
+
+      <h3>ACCOUNT RESULT</h3>
+
+      <div class="row">
+        <span>Game</span>
+        <strong id="gameResult">-</strong>
+      </div>
+
+      <div class="row">
+        <span>Nickname</span>
+        <strong id="nickname">-</strong>
+      </div>
+
+      <div class="row">
+        <span>ID</span>
+        <strong id="idResult">-</strong>
+      </div>
+
+      <div
+        class="row"
+        id="zoneResultRow">
+
+        <span>Zone ID</span>
+        <strong id="zoneResult">-</strong>
+
+      </div>
+
+      <div class="row">
+        <span>Account Created</span>
+        <strong id="created">-</strong>
+      </div>
+
+      <div class="row">
+        <span>Account Age</span>
+        <strong id="age">-</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+let selectedGame = "mlbb";
+
+function selectGame(game) {
+
+  selectedGame = game;
+
+  const mlbbButton =
+    document.getElementById("mlbbButton");
+
+  const ffButton =
+    document.getElementById("ffButton");
+
+  const zoneBox =
+    document.getElementById("zoneBox");
+
+  const idLabel =
+    document.getElementById("idLabel");
+
+  if (game === "mlbb") {
+
+    mlbbButton.classList.add("active");
+    ffButton.classList.remove("active");
+
+    zoneBox.style.display = "block";
+
+    idLabel.innerText = "User ID";
+
+  } else {
+
+    ffButton.classList.add("active");
+    mlbbButton.classList.remove("active");
+
+    zoneBox.style.display = "none";
+
+    idLabel.innerText = "Player ID";
+
+  }
+
+  document.getElementById("result").style.display = "none";
+  document.getElementById("message").innerHTML = "";
+}
+
+async function checkAccount() {
+
+  const userId =
+    document.getElementById("userId").value.trim();
+
+  const zoneId =
+    document.getElementById("zoneId").value.trim();
+
+  const message =
+    document.getElementById("message");
+
+  if (!userId) {
+
+    message.innerHTML =
+      '<div class="error">Sila masukkan ID.</div>';
+
+    return;
+  }
+
+  if (selectedGame === "mlbb" && !zoneId) {
+
+    message.innerHTML =
+      '<div class="error">Sila masukkan Zone ID.</div>';
+
+    return;
+  }
+
+  message.innerHTML =
+    '<div class="error">Checking...</div>';
+
+  /*
+   * NANTI KITA SAMBUNGKAN KE BACKEND VERCEL.
+   */
+
+  message.innerHTML =
+    '<div class="error">API belum disambungkan.</div>';
+}
+
+</script>
+
+</body>
+  </html>
