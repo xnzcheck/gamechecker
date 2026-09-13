@@ -1,326 +1,416 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XNZ Check</title>
 
-  <title>XNZ Check</title>
+<style>
+* {
+  box-sizing: border-box;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #080b12;
+  color: white;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #080b12;
-      color: white;
-    }
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-    .container {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+.box {
+  width: 100%;
+  max-width: 430px;
+  background: #111722;
+  border: 1px solid #263044;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.4);
+}
 
-    .card {
-      width: 100%;
-      max-width: 450px;
-      background: #111722;
-      padding: 25px;
-      border-radius: 20px;
-      border: 1px solid #283449;
-      box-shadow: 0 20px 50px rgba(0,0,0,.4);
-    }
+.logo {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
-    .logo {
-      text-align: center;
-      font-size: 45px;
-    }
+.subtitle {
+  text-align: center;
+  color: #8e9ab0;
+  margin-bottom: 25px;
+}
 
-    h1 {
-      text-align: center;
-      margin: 8px 0;
-    }
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #8993a7;
-    }
+.tab {
+  flex: 1;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #202838;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .games {
-      display: flex;
-      gap: 10px;
-      margin: 25px 0;
-    }
+.tab.active {
+  background: #1683ff;
+}
 
-    .games button {
-      flex: 1;
-      padding: 13px;
-      border: 1px solid #303b51;
-      border-radius: 10px;
-      background: #181f2d;
-      color: white;
-      font-weight: bold;
-    }
+.form {
+  display: none;
+}
 
-    .games button.active {
-      background: #315ea8;
-    }
+.form.active {
+  display: block;
+}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 7px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin: 13px 0 7px;
+  color: #cbd3e1;
+  font-size: 14px;
+}
 
-    input {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid #303b51;
-      background: #080d15;
-      color: white;
-      font-size: 16px;
-    }
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #344057;
+  background: #080d16;
+  color: white;
+  outline: none;
+  font-size: 16px;
+}
 
-    .check {
-      width: 100%;
-      margin-top: 20px;
-      padding: 15px;
-      border: 0;
-      border-radius: 10px;
-      background: #315ea8;
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-    }
+input:focus {
+  border-color: #1683ff;
+}
 
-    .result {
-      margin-top: 20px;
-      padding: 18px;
-      background: #080d15;
-      border-radius: 12px;
-    }
+.check-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: #1683ff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #202938;
-    }
+.check-btn:disabled {
+  opacity: .6;
+}
 
-    .row span {
-      color: #8993a7;
-    }
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #080d16;
+  border: 1px solid #263044;
+  display: none;
+}
 
-    .error {
-      margin-top: 15px;
-      padding: 12px;
-      background: #401b24;
-      border-radius: 10px;
-      color: #ffb7c0;
-    }
-  </style>
+.result.show {
+  display: block;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 8px 0;
+  border-bottom: 1px solid #202838;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.key {
+  color: #8e9ab0;
+}
+
+.value {
+  text-align: right;
+  font-weight: bold;
+}
+
+.error {
+  color: #ff7070;
+}
+
+.success {
+  color: #65e89a;
+}
+
+.footer {
+  text-align: center;
+  color: #68748a;
+  font-size: 12px;
+  margin-top: 20px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
+  <div class="box">
 
-  <div class="card">
+    <div class="logo">XNZ CHECK</div>
+    <div class="subtitle">Game ID Checker</div>
 
-    <div class="logo">🎮</div>
-
-    <h1>XNZ CHECK</h1>
-
-    <div class="subtitle">
-      MLBB & Free Fire Checker
-    </div>
-
-    <div class="games">
-
-      <button
-        id="mlbbButton"
-        class="active"
-        onclick="selectGame('mlbb')">
-        🔵 MLBB
+    <div class="tabs">
+      <button class="tab active" onclick="showGame('mlbb')">
+        Mobile Legends
       </button>
 
-      <button
-        id="ffButton"
-        onclick="selectGame('freefire')">
-        🔴 FREE FIRE
+      <button class="tab" onclick="showGame('ff')">
+        Free Fire
       </button>
-
     </div>
 
-    <label id="idLabel">
-      User ID
-    </label>
+    <!-- MLBB -->
+    <div id="mlbbForm" class="form active">
 
-    <input
-      id="userId"
-      type="text"
-      placeholder="Masukkan User ID">
-
-    <div id="zoneBox">
-
-      <label>
-        Zone ID
-      </label>
-
+      <label>Mobile Legends User ID</label>
       <input
-        id="zoneId"
+        id="mlbbId"
         type="text"
-        placeholder="Masukkan Zone ID">
+        inputmode="numeric"
+        placeholder="Contoh: 123456789"
+      >
+
+      <label>Zone ID / Server ID</label>
+      <input
+        id="mlbbZone"
+        type="text"
+        inputmode="numeric"
+        placeholder="Contoh: 1234"
+      >
+
+      <button class="check-btn" onclick="checkMLBB()">
+        🔍 CHECK MLBB
+      </button>
 
     </div>
 
-    <button
-      class="check"
-      onclick="checkAccount()">
+    <!-- FREE FIRE -->
+    <div id="ffForm" class="form">
 
-      CHECK ACCOUNT
+      <label>Free Fire Player ID</label>
+      <input
+        id="ffId"
+        type="text"
+        inputmode="numeric"
+        placeholder="Contoh: 1234567890"
+      >
 
-    </button>
+      <button class="check-btn" onclick="checkFF()">
+        🔍 CHECK FREE FIRE
+      </button>
 
-    <div id="message"></div>
+    </div>
 
-    <div
-      id="result"
-      class="result"
-      style="display:none;">
+    <div id="result" class="result"></div>
 
-      <h3>ACCOUNT RESULT</h3>
-
-      <div class="row">
-        <span>Game</span>
-        <strong id="gameResult">-</strong>
-      </div>
-
-      <div class="row">
-        <span>Nickname</span>
-        <strong id="nickname">-</strong>
-      </div>
-
-      <div class="row">
-        <span>ID</span>
-        <strong id="idResult">-</strong>
-      </div>
-
-      <div
-        class="row"
-        id="zoneResultRow">
-
-        <span>Zone ID</span>
-        <strong id="zoneResult">-</strong>
-
-      </div>
-
-      <div class="row">
-        <span>Account Created</span>
-        <strong id="created">-</strong>
-      </div>
-
-      <div class="row">
-        <span>Account Age</span>
-        <strong id="age">-</strong>
-      </div>
-
+    <div class="footer">
+      XNZ Check • MLBB & Free Fire
     </div>
 
   </div>
-
 </div>
 
 <script>
 
-let selectedGame = "mlbb";
+let currentGame = "mlbb";
 
-function selectGame(game) {
+function showGame(game) {
 
-  selectedGame = game;
+  currentGame = game;
 
-  const mlbbButton =
-    document.getElementById("mlbbButton");
+  document
+    .getElementById("mlbbForm")
+    .classList.toggle("active", game === "mlbb");
 
-  const ffButton =
-    document.getElementById("ffButton");
+  document
+    .getElementById("ffForm")
+    .classList.toggle("active", game === "ff");
 
-  const zoneBox =
-    document.getElementById("zoneBox");
+  const tabs = document.querySelectorAll(".tab");
 
-  const idLabel =
-    document.getElementById("idLabel");
+  tabs[0].classList.toggle("active", game === "mlbb");
+  tabs[1].classList.toggle("active", game === "ff");
 
-  if (game === "mlbb") {
-
-    mlbbButton.classList.add("active");
-    ffButton.classList.remove("active");
-
-    zoneBox.style.display = "block";
-
-    idLabel.innerText = "User ID";
-
-  } else {
-
-    ffButton.classList.add("active");
-    mlbbButton.classList.remove("active");
-
-    zoneBox.style.display = "none";
-
-    idLabel.innerText = "Player ID";
-
-  }
-
-  document.getElementById("result").style.display = "none";
-  document.getElementById("message").innerHTML = "";
+  document.getElementById("result").classList.remove("show");
 }
 
-async function checkAccount() {
 
-  const userId =
-    document.getElementById("userId").value.trim();
+async function checkMLBB() {
 
-  const zoneId =
-    document.getElementById("zoneId").value.trim();
+  const userId = document.getElementById("mlbbId").value.trim();
+  const zoneId = document.getElementById("mlbbZone").value.trim();
 
-  const message =
-    document.getElementById("message");
+  if (!userId || !zoneId) {
+    showError("Sila masukkan User ID dan Zone ID.");
+    return;
+  }
+
+  await checkGame("mlbb", userId, zoneId);
+}
+
+
+async function checkFF() {
+
+  const userId = document.getElementById("ffId").value.trim();
 
   if (!userId) {
-
-    message.innerHTML =
-      '<div class="error">Sila masukkan ID.</div>';
-
+    showError("Sila masukkan Player ID Free Fire.");
     return;
   }
 
-  if (selectedGame === "mlbb" && !zoneId) {
+  await checkGame("ff", userId, "");
+}
 
-    message.innerHTML =
-      '<div class="error">Sila masukkan Zone ID.</div>';
 
-    return;
+async function checkGame(game, userId, zoneId) {
+
+  const result = document.getElementById("result");
+
+  result.className = "result show";
+  result.innerHTML = `
+    <div class="success">
+      ⏳ Sedang semak ID...
+    </div>
+  `;
+
+  const buttons = document.querySelectorAll(".check-btn");
+  buttons.forEach(button => button.disabled = true);
+
+  try {
+
+    const response = await fetch("/api/checker", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        game: game,
+        userId: userId,
+        zoneId: zoneId
+      })
+
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.success === false) {
+      throw new Error(
+        data.message || "ID tidak dijumpai."
+      );
+    }
+
+    result.innerHTML = `
+
+      <div class="row">
+        <span class="key">Game</span>
+        <span class="value">${escapeHTML(data.game || game)}</span>
+      </div>
+
+      <div class="row">
+        <span class="key">ID</span>
+        <span class="value">${escapeHTML(data.id || userId)}</span>
+      </div>
+
+      ${
+        data.server
+        ? `
+        <div class="row">
+          <span class="key">Zone / Server</span>
+          <span class="value">${escapeHTML(data.server)}</span>
+        </div>
+        `
+        : ""
+      }
+
+      <div class="row">
+        <span class="key">Nickname</span>
+        <span class="value success">
+          ${escapeHTML(data.name || "Tidak diketahui")}
+        </span>
+      </div>
+
+      ${
+        data.country
+        ? `
+        <div class="row">
+          <span class="key">Country</span>
+          <span class="value">${escapeHTML(data.country)}</span>
+        </div>
+        `
+        : ""
+      }
+
+    `;
+
+  } catch (error) {
+
+    showError(
+      error.message || "Server API sedang bermasalah."
+    );
+
+  } finally {
+
+    buttons.forEach(button => button.disabled = false);
+
   }
+}
 
-  message.innerHTML =
-    '<div class="error">Checking...</div>';
 
-  /*
-   * NANTI KITA SAMBUNGKAN KE BACKEND VERCEL.
-   */
+function showError(message) {
 
-  message.innerHTML =
-    '<div class="error">API belum disambungkan.</div>';
+  const result = document.getElementById("result");
+
+  result.className = "result show";
+
+  result.innerHTML = `
+    <div class="error">
+      ❌ ${escapeHTML(message)}
+    </div>
+  `;
+}
+
+
+function escapeHTML(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 }
 
 </script>
 
 </body>
-  </html>
+</html>
